@@ -1,0 +1,22 @@
+[
+  { "foreign": "hola", "translation": "hello" },
+  { "foreign": "adiós", "translation": "goodbye" },
+  { "foreign": "gracias", "translation": "thank you" },
+  { "foreign": "por favor", "translation": "please" },
+  { "foreign": "amigo", "translation": "friend" },
+  { "foreign": "familia", "translation": "family" },
+  { "foreign": "comer", "translation": "to eat" },
+  { "foreign": "casa", "translation": "house" },
+  { "foreign": "sol", "translation": "sun" },
+  { "foreign": "luna", "translation": "moon" },
+  { "foreign": "agua", "translation": "water" },
+  { "foreign": "cielo", "translation": "sky" },
+  { "foreign": "libro", "translation": "book" },
+  { "foreign": "escuela", "translation": "school" },
+  { "foreign": "trabajo", "translation": "work" },
+  { "foreign": "comer", "translation": "to eat" },
+  { "foreign": "beber", "translation": "to drink" },
+  { "foreign": "feliz", "translation": "happy" },
+  { "foreign": "triste", "translation": "sad" },
+  { "foreign": "calle", "translation": "street" }
+]
