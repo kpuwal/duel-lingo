@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { shuffleArray, Word } from '../utils';
 
 interface RoundData {
@@ -23,11 +23,22 @@ export default function GameScreen() {
 
   const [score, setScore] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
-  const [matchedCount, setMatchedCount] = useState<number>(0); // ✅ progress tracker
+  const [matchedCount, setMatchedCount] = useState<number>(0);
+
   const [selectedForeign, setSelectedForeign] = useState<number | null>(null);
   const [selectedTranslation, setSelectedTranslation] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [secondColumn, setSecondColumn] = useState<'foreign' | 'translation' | null>(null);
+
+  // 🔵 Animated progress
+  const progressAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(progressAnim, {
+      toValue: matchedCount / 20,
+      duration: 400,
+      useNativeDriver: false, // width can't use native driver
+    }).start();
+  }, [matchedCount]);
 
   function makeRoundData(pairs: Word[]): RoundData {
     return {
@@ -37,7 +48,6 @@ export default function GameScreen() {
     };
   }
 
-  // 🟩 handle successful match
   const handleCorrectMatch = (foreignIdx: number, transIdx: number) => {
     const matchedForeign = roundData.foreignWords[foreignIdx];
     const matchedTranslation = roundData.translations[transIdx];
@@ -46,17 +56,15 @@ export default function GameScreen() {
       w => !(w.foreign === matchedForeign && w.translation === matchedTranslation)
     );
 
-    // refill from pool if available
     if (remaining.length > 0) {
       newActive.push(remaining[0]);
       setRemaining(prev => prev.slice(1));
     }
 
     setActivePairs(newActive);
-    setMatchedCount(prev => prev + 1); // ✅ increment progress
+    setMatchedCount(prev => prev + 1);
 
     if (newActive.length === 0 && remaining.length === 0) {
-      // game finished
       router.push({
         pathname: '/results',
         params: { score: (score + 1).toString(), total: (total + 1).toString() },
@@ -118,24 +126,36 @@ export default function GameScreen() {
     }
   };
 
-  // 🔵 calculate progress %
-  const progress = matchedCount / 20;
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Word Match</Text>
-      <Text style={styles.score}>Score: {score}/{total}</Text>
-      <Text style={styles.progressText}>Matched: {matchedCount}/20</Text>
-
-      {/* ✅ Progress bar */}
-      <View style={styles.progressBarBackground}>
-        <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />
+      {/* ✅ Animated progress bar with scale */}
+      <View style={styles.progressWrapper}>
+        <View style={styles.progressBarBackground}>
+          <Animated.View
+            style={[
+              styles.progressBarFill,
+              {
+                width: progressAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0%', '100%'],
+                }),
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.scaleRow}>
+          {[0, 5, 10, 15, 20].map((val, i) => (
+            <Text key={i} style={styles.scaleText}>
+              {val}
+            </Text>
+          ))}
+        </View>
       </View>
 
+      {/* Columns */}
       <View style={styles.columns}>
-        {/* Foreign words */}
+        {/* Foreign column */}
         <View style={styles.column}>
-          <Text style={styles.columnHeader}>Spanish</Text>
           {roundData.foreignWords.map((word, idx) => (
             <TouchableOpacity
               key={idx}
@@ -167,9 +187,8 @@ export default function GameScreen() {
           ))}
         </View>
 
-        {/* Translations */}
+        {/* Translation column */}
         <View style={styles.column}>
-          <Text style={styles.columnHeader}>English</Text>
           {roundData.translations.map((trans, idx) => (
             <TouchableOpacity
               key={idx}
@@ -205,78 +224,39 @@ export default function GameScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 10,
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  score: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#000000',
-  },
-  progressText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#000000',
-    fontWeight: '500',
-  },
+  container: { flex: 1, alignItems: 'center', padding: 20, backgroundColor: '#FFF' },
+  title: { fontSize: 20, marginBottom: 20, fontWeight: 'bold', color: '#000' },
+  progressWrapper: { width: '90%', marginBottom: 20 },
   progressBarBackground: {
-    width: '90%',
-    height: 12,
+    width: '100%',
+    height: 14,
     backgroundColor: '#E0E0E0',
-    borderRadius: 6,
-    marginBottom: 15,
+    borderRadius: 7,
     overflow: 'hidden',
   },
-  progressBarFill: {
-    height: '100%',
-    backgroundColor: '#4CAF50', // green fill
-  },
-  columns: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flex: 1,
-    width: '100%',
-  },
-  column: {
-    flex: 1,
-    justifyContent: 'center',
-  },
+  progressBarFill: { height: '100%', backgroundColor: '#4CAF50' },
+  scaleRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
+  scaleText: { fontSize: 12, color: '#000' },
+  columns: { flexDirection: 'row', justifyContent: 'space-around', flex: 1, width: '100%' },
+  column: { flex: 1, justifyContent: 'center' },
   columnHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000000',
     textAlign: 'center',
     marginBottom: 10,
+    color: '#000',
   },
   item: {
-    padding: 10,
+    padding: 15,
     borderWidth: 1,
-    borderColor: '#000000',
+    borderColor: '#000',
     margin: 5,
     borderRadius: 5,
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
   },
-  selected: {
-    backgroundColor: '#D3D3D3',
-  },
-  correct: {
-    backgroundColor: '#90EE90',
-  },
-  incorrect: {
-    backgroundColor: '#FF6347',
-  },
-  itemText: {
-    color: '#000000',
-    fontSize: 16,
-  },
+  selected: { backgroundColor: '#D3D3D3' },
+  correct: { backgroundColor: '#90EE90' },
+  incorrect: { backgroundColor: '#FF6347' },
+  itemText: { fontSize: 18, color: '#000' },
 });
