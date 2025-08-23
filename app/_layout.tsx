@@ -17,7 +17,7 @@ export default function RootLayout() {
     <ThemeProvider value={DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Vocab Matcher' }} />
-        <Stack.Screen name="game" options={{ title: 'Word Match' }} />
+        <Stack.Screen name="game" options={{ title: 'Round' }} />
         <Stack.Screen name="results" options={{ title: 'Results' }} />
       </Stack>
       <StatusBar style="dark" />

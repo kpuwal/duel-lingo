@@ -21,9 +21,9 @@ export default function HomeScreen() {
       <Button
         title="Start Game"
         onPress={() => router.push({ pathname: '/game', params: { words: JSON.stringify(words) } })}
-        disabled={words.length < 6}
+        disabled={words.length < 5}
       />
-      {words.length < 6 && <Text style={styles.error}>Need at least 6 words!</Text>}
+      {words.length < 6 && <Text style={styles.error}>Need at least 5 words!</Text>}
     </View>
   );
 }

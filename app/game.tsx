@@ -20,7 +20,7 @@ export default function GameScreen() {
 
   const [remaining, setRemaining] = useState<Word[]>(initialPool.slice(6));
   const [activePairs, setActivePairs] = useState<Word[]>(initialPool.slice(0, 6));
-  console.log(activePairs)
+  
   const [roundData, setRoundData] = useState<RoundData>(makeRoundData(initialPool.slice(0, 6)));
 
   const [score, setScore] = useState<number>(0);
