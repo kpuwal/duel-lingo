@@ -1,11 +1,12 @@
+import { ProgressBar } from '@/components/progress_bar';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { shuffleArray, Word } from '../utils';
 
 interface RoundData {
-  foreignWords: string[];
-  translations: string[];
+  dutchWords: string[];
+  englishWords: string[];
   correctPairs: Word[];
 }
 
@@ -19,14 +20,15 @@ export default function GameScreen() {
 
   const [remaining, setRemaining] = useState<Word[]>(initialPool.slice(6));
   const [activePairs, setActivePairs] = useState<Word[]>(initialPool.slice(0, 6));
+  console.log(activePairs)
   const [roundData, setRoundData] = useState<RoundData>(makeRoundData(initialPool.slice(0, 6)));
 
   const [score, setScore] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [matchedCount, setMatchedCount] = useState<number>(0);
 
-  const [selectedForeign, setSelectedForeign] = useState<number | null>(null);
-  const [selectedTranslation, setSelectedTranslation] = useState<number | null>(null);
+  const [selectedDutch, setSelectedDutch] = useState<number | null>(null);
+  const [selectedEnglish, setSelectedEnglish] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [secondColumn, setSecondColumn] = useState<'foreign' | 'translation' | null>(null);
 
@@ -42,15 +44,15 @@ export default function GameScreen() {
 
   function makeRoundData(pairs: Word[]): RoundData {
     return {
-      foreignWords: pairs.map(w => w.foreign),
-      translations: shuffleArray(pairs.map(w => w.translation)),
+      dutchWords: pairs.map(w => w.foreign),
+      englishWords: shuffleArray(pairs.map(w => w.translation)),
       correctPairs: pairs,
     };
   }
 
   const handleCorrectMatch = (foreignIdx: number, transIdx: number) => {
-    const matchedForeign = roundData.foreignWords[foreignIdx];
-    const matchedTranslation = roundData.translations[transIdx];
+    const matchedForeign = roundData.dutchWords[foreignIdx];
+    const matchedTranslation = roundData.englishWords[transIdx];
 
     const newActive = activePairs.filter(
       w => !(w.foreign === matchedForeign && w.translation === matchedTranslation)
@@ -75,10 +77,10 @@ export default function GameScreen() {
   };
 
   const handleForeignPress = (index: number) => {
-    if (selectedTranslation !== null) {
+    if (selectedEnglish !== null) {
       const correct =
         roundData.correctPairs[index].translation ===
-        roundData.translations[selectedTranslation];
+        roundData.englishWords[selectedEnglish];
 
       setScore(prev => prev + (correct ? 1 : 0));
       setTotal(prev => prev + 1);
@@ -87,24 +89,24 @@ export default function GameScreen() {
 
       setTimeout(() => {
         if (correct) {
-          handleCorrectMatch(index, selectedTranslation);
+          handleCorrectMatch(index, selectedEnglish);
         }
         setFeedback(null);
-        setSelectedForeign(null);
-        setSelectedTranslation(null);
+        setSelectedDutch(null);
+        setSelectedEnglish(null);
         setSecondColumn(null);
       }, 800);
     } else {
-      setSelectedForeign(index);
-      setSelectedTranslation(null);
+      setSelectedDutch(index);
+      setSelectedEnglish(null);
     }
   };
 
   const handleTranslationPress = (index: number) => {
-    if (selectedForeign !== null) {
+    if (selectedDutch !== null) {
       const correct =
-        roundData.correctPairs[selectedForeign].translation ===
-        roundData.translations[index];
+        roundData.correctPairs[selectedDutch].translation ===
+        roundData.englishWords[index];
 
       setScore(prev => prev + (correct ? 1 : 0));
       setTotal(prev => prev + 1);
@@ -113,68 +115,46 @@ export default function GameScreen() {
 
       setTimeout(() => {
         if (correct) {
-          handleCorrectMatch(selectedForeign, index);
+          handleCorrectMatch(selectedDutch, index);
         }
         setFeedback(null);
-        setSelectedForeign(null);
-        setSelectedTranslation(null);
+        setSelectedDutch(null);
+        setSelectedEnglish(null);
         setSecondColumn(null);
       }, 800);
     } else {
-      setSelectedTranslation(index);
-      setSelectedForeign(null);
+      setSelectedEnglish(index);
+      setSelectedDutch(null);
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* ✅ Animated progress bar with scale */}
-      <View style={styles.progressWrapper}>
-        <View style={styles.progressBarBackground}>
-          <Animated.View
-            style={[
-              styles.progressBarFill,
-              {
-                width: progressAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
-            ]}
-          />
-        </View>
-        <View style={styles.scaleRow}>
-          {[0, 5, 10, 15, 20].map((val, i) => (
-            <Text key={i} style={styles.scaleText}>
-              {val}
-            </Text>
-          ))}
-        </View>
-      </View>
+      <ProgressBar progressAnim={progressAnim} matchedCount={matchedCount} />
 
       {/* Columns */}
       <View style={styles.columns}>
         {/* Foreign column */}
         <View style={styles.column}>
-          {roundData.foreignWords.map((word, idx) => (
+          {roundData.dutchWords.map((word, idx) => (
             <TouchableOpacity
               key={idx}
               style={[
                 styles.item,
-                selectedForeign === idx ? styles.selected : null,
-                feedback === 'correct' && selectedForeign === idx ? styles.correct : null,
+                selectedDutch === idx ? styles.selected : null,
+                feedback === 'correct' && selectedDutch === idx ? styles.correct : null,
                 feedback === 'correct' &&
                 secondColumn === 'foreign' &&
-                selectedTranslation !== null &&
+                selectedEnglish !== null &&
                 roundData.correctPairs[idx].translation ===
-                  roundData.translations[selectedTranslation]
+                  roundData.englishWords[selectedEnglish]
                   ? styles.correct
                   : null,
                 feedback === 'incorrect' &&
                 secondColumn === 'foreign' &&
                 roundData.correctPairs[idx].translation !==
-                  (selectedTranslation !== null
-                    ? roundData.translations[selectedTranslation]
+                  (selectedEnglish !== null
+                    ? roundData.englishWords[selectedEnglish]
                     : null)
                   ? styles.incorrect
                   : null,
@@ -189,24 +169,24 @@ export default function GameScreen() {
 
         {/* Translation column */}
         <View style={styles.column}>
-          {roundData.translations.map((trans, idx) => (
+          {roundData.englishWords.map((trans, idx) => (
             <TouchableOpacity
               key={idx}
               style={[
                 styles.item,
-                selectedTranslation === idx ? styles.selected : null,
-                feedback === 'correct' && selectedTranslation === idx ? styles.correct : null,
+                selectedEnglish === idx ? styles.selected : null,
+                feedback === 'correct' && selectedEnglish === idx ? styles.correct : null,
                 feedback === 'correct' &&
                 secondColumn === 'translation' &&
-                selectedForeign !== null &&
-                roundData.correctPairs[selectedForeign].translation === trans
+                selectedDutch !== null &&
+                roundData.correctPairs[selectedDutch].translation === trans
                   ? styles.correct
                   : null,
                 feedback === 'incorrect' &&
                 secondColumn === 'translation' &&
                 roundData.correctPairs.find(w => w.translation === trans)?.foreign !==
-                  (selectedForeign !== null
-                    ? roundData.foreignWords[selectedForeign]
+                  (selectedDutch !== null
+                    ? roundData.dutchWords[selectedDutch]
                     : null)
                   ? styles.incorrect
                   : null,
