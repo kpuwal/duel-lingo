@@ -1,6 +1,10 @@
-export interface Word {
+export interface Word_prev {
   foreign: string;
   translation: string;
+}
+export interface Word {
+  dutch: string;
+  english: string;
 }
 
 // export function shuffleArray<T>(array: T[]): T[] {
@@ -17,8 +21,8 @@ export function shuffleArray<T>(array: T[]): T[] {
 
 export async function loadWords(): Promise<Word[]> {
   try {
-    const words: Word[] = require('./assets/words.json');
-    return words.filter(word => word.foreign && word.translation);
+    const words: Word[] = require('./assets/words2.json');
+    return words.filter(word => word.dutch && word.english);
   } catch (error) {
     console.error('Error loading JSON:', error);
     return [];

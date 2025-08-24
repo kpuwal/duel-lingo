@@ -17,10 +17,14 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Vocab Matcher</Text>
-      <Button
+      {/* <Button
         title="Start Game"
         onPress={() => router.push({ pathname: '/game', params: { words: JSON.stringify(words) } })}
+        disabled={words.length < 5}
+      /> */}
+      <Button
+        title="Start Slow Game"
+        onPress={() => router.push({ pathname: '/slow_game', params: { words: JSON.stringify(words) } })}
         disabled={words.length < 5}
       />
       {words.length < 6 && <Text style={styles.error}>Need at least 5 words!</Text>}
