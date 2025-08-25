@@ -23,7 +23,7 @@ export default function HomeScreen() {
         disabled={words.length < 5}
       /> */}
       <Button
-        title="Start Slow Game"
+        title="Start Game"
         onPress={() => router.push({ pathname: '/slow_game', params: { words: JSON.stringify(words) } })}
         disabled={words.length < 5}
       />
