@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import {
-    Animated,
-    StyleProp,
-    Text,
-    TextStyle,
-    TouchableOpacity,
-    ViewStyle
+  Animated,
+  StyleProp,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
 } from "react-native";
 
 interface AnimatedWordProps {
@@ -32,15 +32,13 @@ export function AnimatedWord({
       duration: 500,
       useNativeDriver: true,
     }).start();
-  }, [isDisabled]);
 
-  useEffect(() => {
     if (isDisabled) {
       Animated.sequence([
         Animated.timing(borderAnim, {
           toValue: 1,
-          duration: 200,
-          useNativeDriver: false, // color animations can't use native driver
+          duration: 2000, // 2s green border
+          useNativeDriver: false,
         }),
         Animated.timing(borderAnim, {
           toValue: 0,
@@ -48,33 +46,18 @@ export function AnimatedWord({
           useNativeDriver: false,
         }),
       ]).start();
-
-      Animated.timing(opacity, {
-        toValue: 0.3,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-      borderAnim.setValue(0);
     }
   }, [isDisabled]);
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ["#343a40", "#20bf55"],
+    outputRange: ["#495057", "#20bf55"],
   });
-  
+
   return (
-    <Animated.View style={[{ opacity }]}>
+    <Animated.View style={[buttonStyle, { opacity, borderWidth: 2, borderColor }]}>
       <TouchableOpacity onPress={onPress} disabled={isDisabled}>
-        <Animated.View style={[buttonStyle, {borderWidth: 2, borderColor}]}>
-            <Text style={textStyle}>{word}</Text>
-        </Animated.View>
+        <Text style={textStyle}>{word}</Text>
       </TouchableOpacity>
     </Animated.View>
   );

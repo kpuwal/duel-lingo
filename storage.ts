@@ -1,41 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export interface Word {
-  dutch: string;
-  english: string;
-}
-
-export const defaultWords: Word[] = [
-  { dutch: "hond", english: "dog" },
-  { dutch: "kat", english: "cat" },
-  { dutch: "huis", english: "house" },
-  { dutch: "eten", english: "food" },
-  { dutch: "drinken", english: "drink" },
-];
-
-
-// export function shuffleArray<T>(array: T[]): T[] {
-//   return [...array].sort(() => Math.random() - 0.5);
-// }
-export function shuffleArray<T>(array: T[]): T[] {
-  const result = [...array];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
-// export async function loadWords(): Promise<Word[]> {
-//   try {
-//     const words: Word[] = require('./assets/words2.json');
-//     return words.filter(word => word.dutch && word.english);
-//   } catch (error) {
-//     console.error('Error loading JSON:', error);
-//     return [];
-//   }
-// }
-
+import { Word, defaultWords } from "./utils"; // adjust path if needed
 
 const STORAGE_KEY = "words";
 

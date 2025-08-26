@@ -16,10 +16,11 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Vocab Matcher' }} />
+        <Stack.Screen name="index" options={{ title: 'Dutch Duo' }} />
         {/* <Stack.Screen name="game" options={{ title: 'Round' }} /> */}
         <Stack.Screen name="results" options={{ title: 'Results' }} />
-        <Stack.Screen name="slow_game" options={{ title: 'Single Round' }} />
+        <Stack.Screen name="single_game" options={{ title: 'Single Game' }} />
+        <Stack.Screen name="add_words" options={{ title: 'Add Words' }} />
       </Stack>
       <StatusBar style="light" />
     </ThemeProvider>
