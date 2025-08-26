@@ -6,11 +6,17 @@ export interface Word {
 }
 
 export const defaultWords: Word[] = [
-  { dutch: "hond", english: "dog" },
-  { dutch: "kat", english: "cat" },
-  { dutch: "huis", english: "house" },
-  { dutch: "eten", english: "food" },
-  { dutch: "drinken", english: "drink" },
+  { dutch: "opbouwend", english: "constructive" },
+  { dutch: "toestemming", english: "permission" },
+  { dutch: "feit", english: "fact" },
+  { dutch: "beoordelen", english: "judge" },
+  { dutch: "opmerking", english: "comment" },
+  { dutch: "oordeel", english: "judgement" },
+  { dutch: "onredelijk", english: "unreasonable" },
+  { dutch: "houding", english: "position" },
+  { dutch: "overtuigen", english: "convince" },
+  { dutch: "gelijk", english: "right" },
+  { dutch: "eerlijk", english: "honest" },
 ];
 
 
