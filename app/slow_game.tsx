@@ -1,7 +1,8 @@
+import { AnimatedWord } from "@/components/animated_word";
 import { shuffleArray, Word } from "@/utils";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 interface Data {
   dutchWords: {
@@ -59,8 +60,10 @@ export default function SlowGame() {
             };
     }
 
-    const handleCorrectMatch = (dutchIdx: number, englishIdx: number) => {
-
+    const handleCorrectMatch = (dutchWord: string, englishWord: string) => {
+        return roundData.correctPairs.some(
+            (pair) => pair.dutch === dutchWord && pair.english === englishWord
+            );
     }
 
     const handleDutchWordPress = (index: number) => {
@@ -68,9 +71,7 @@ export default function SlowGame() {
             const selectedDutchWord = roundData.dutchWords[index].word;
             const selectedEnglishWord = roundData.englishWords[selectedWords.english].word;
 
-            const isMatch = roundData.correctPairs.some(
-            (pair) => pair.dutch === selectedDutchWord && pair.english === selectedEnglishWord
-            );
+            const isMatch = handleCorrectMatch(selectedDutchWord, selectedEnglishWord)
 
             if (isMatch) {
             setRoundData((prev) => ({
@@ -97,9 +98,7 @@ export default function SlowGame() {
             const selectedDutchWord = roundData.dutchWords[selectedWords.dutch].word;
             const selectedEnglishWord = roundData.englishWords[index].word;
 
-            const isMatch = roundData.correctPairs.some(
-            (pair) => pair.dutch === selectedDutchWord && pair.english === selectedEnglishWord
-            );
+            const isMatch = handleCorrectMatch(selectedDutchWord, selectedEnglishWord)
 
             if (isMatch) {
             setRoundData((prev) => ({
@@ -123,27 +122,28 @@ export default function SlowGame() {
     return (
         <View style={styles.container}>
             <View style={styles.columns}>
-                <View style={styles.column}>
-                    {/* DUTCH */}
-                    {roundData.dutchWords.map((item, idx) => (
-                        <TouchableOpacity
-                            key={idx}
-                            style={[styles.item, item.isDisabled ? { backgroundColor: '#4CAF50' } : {}]}
-                            onPress={() => handleDutchWordPress(idx)}
-                            disabled={item.isDisabled}>
-                                <Text style={styles.text}>{item.word}</Text>
-                        </TouchableOpacity>
-                    ))}
+               <View style={styles.column}>
+                {roundData.dutchWords.map((item, idx) => (
+                    <AnimatedWord
+                        key={idx}
+                        word={item.word}
+                        isDisabled={item.isDisabled}
+                        onPress={() => handleDutchWordPress(idx)}
+                        buttonStyle={[styles.item, item.isDisabled && styles.disabledItem]}
+                        textStyle={styles.text}
+                    />
+                ))}
                 </View>
                 <View style={styles.column}>
                     {roundData.englishWords.map((item, idx) => (
-                        <TouchableOpacity
+                        <AnimatedWord
                             key={idx}
-                            style={[styles.item, item.isDisabled ? { backgroundColor: '#4CAF50' } : {}]}
+                            word={item.word}
+                            isDisabled={item.isDisabled}
                             onPress={() => handleEnglishWordPress(idx)}
-                            disabled={item.isDisabled}>
-                                <Text style={styles.text}>{item.word}</Text>
-                        </TouchableOpacity>
+                            buttonStyle={[styles.item, item.isDisabled && styles.disabledItem]}
+                            textStyle={styles.text}>
+                        </AnimatedWord>
                     ))}
                 </View>
             </View>
@@ -154,19 +154,24 @@ export default function SlowGame() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: "#383942" },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: "black" },
     title: { fontSize: 24, marginBottom: 20 },
     error: { color: 'red', marginTop: 10 },
     columns: { flexDirection: 'row', justifyContent: 'space-around', flex: 1, width: '100%' },
     column: { flex: 1, justifyContent: 'center' },
     item: {
-        padding: 15,
-        borderWidth: 0,
-        borderColor: '#000',
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#575764',
         margin: 5,
         borderRadius: 5,
         alignItems: 'center',
         backgroundColor: '#575764',
     },
-    text: {color: "#e0e0e0", fontSize: 18}
+    disabledItem: {
+        backgroundColor: '#575764',
+        borderColor: "green"
+    },
+    text: {color: "#e0e0e0", fontSize: 18},
+    textDisabled: { color: "black" }
 });
