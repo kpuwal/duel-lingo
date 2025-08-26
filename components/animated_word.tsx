@@ -5,6 +5,7 @@ import {
   Text,
   TextStyle,
   TouchableOpacity,
+  View,
   ViewStyle,
 } from "react-native";
 
@@ -24,40 +25,21 @@ export function AnimatedWord({
   textStyle,
 }: AnimatedWordProps) {
   const opacity = useRef(new Animated.Value(1)).current;
-  const borderAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(opacity, {
       toValue: isDisabled ? 0.3 : 1,
       duration: 500,
-      useNativeDriver: true,
+      useNativeDriver: true, // safe for opacity
     }).start();
-
-    if (isDisabled) {
-      Animated.sequence([
-        Animated.timing(borderAnim, {
-          toValue: 1,
-          duration: 2000, // 2s green border
-          useNativeDriver: false,
-        }),
-        Animated.timing(borderAnim, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: false,
-        }),
-      ]).start();
-    }
   }, [isDisabled]);
 
-  const borderColor = borderAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["#495057", "#20bf55"],
-  });
-
   return (
-    <Animated.View style={[buttonStyle, { opacity, borderWidth: 2, borderColor }]}>
+    <Animated.View style={{ opacity }}>
       <TouchableOpacity onPress={onPress} disabled={isDisabled}>
-        <Text style={textStyle}>{word}</Text>
+        <View style={buttonStyle}>
+          <Text style={textStyle}>{word}</Text>
+        </View>
       </TouchableOpacity>
     </Animated.View>
   );

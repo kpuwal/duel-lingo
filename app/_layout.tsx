@@ -21,6 +21,7 @@ export default function RootLayout() {
         <Stack.Screen name="results" options={{ title: 'Results' }} />
         <Stack.Screen name="single_game" options={{ title: 'Single Game' }} />
         <Stack.Screen name="add_words" options={{ title: 'Add Words' }} />
+        <Stack.Screen name="multi_round" options={{ title: 'Multi Round Game' }} />
       </Stack>
       <StatusBar style="light" />
     </ThemeProvider>
