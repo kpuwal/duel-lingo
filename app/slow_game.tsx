@@ -154,7 +154,7 @@ export default function SlowGame() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: "black" },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: "#161a1d" },
     title: { fontSize: 24, marginBottom: 20 },
     error: { color: 'red', marginTop: 10 },
     columns: { flexDirection: 'row', justifyContent: 'space-around', flex: 1, width: '100%' },
@@ -162,16 +162,16 @@ const styles = StyleSheet.create({
     item: {
         padding: 20,
         borderWidth: 1,
-        borderColor: '#575764',
+        borderColor: '#495057',
         margin: 5,
-        borderRadius: 5,
+        borderRadius: 10,
         alignItems: 'center',
-        backgroundColor: '#575764',
+        backgroundColor: '#161a1d',
     },
     disabledItem: {
-        backgroundColor: '#575764',
-        borderColor: "green"
+        backgroundColor: '#343a40',
+        borderColor: "#343a40"
     },
-    text: {color: "#e0e0e0", fontSize: 18},
-    textDisabled: { color: "black" }
+    text: {color: "#adb5bd", fontSize: 20},
+    textDisabled: { color: "#f8f9fa" }
 });
