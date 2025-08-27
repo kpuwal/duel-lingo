@@ -16,7 +16,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Dutch Duo' }} />
+        <Stack.Screen name="index" options={{ title: 'Duel Lingo' }} />
         {/* <Stack.Screen name="game" options={{ title: 'Round' }} /> */}
         <Stack.Screen name="results" options={{ title: 'Results' }} />
         <Stack.Screen name="single_game" options={{ title: 'Single Game' }} />

@@ -28,6 +28,8 @@ export default function MultiRoundGame() {
   const [currentRound, setCurrentRound] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [matchedCount, setMatchedCount] = useState(0);
+
+  const [mistakes, setMistakes] = useState(0);
   
   const params = useLocalSearchParams<{ rounds: string }>();
   const totalRounds = params.rounds ? parseInt(params.rounds, 10) : 1;
@@ -59,7 +61,7 @@ export default function MultiRoundGame() {
       const timer = setTimeout(() => {
         router.dismissAll();
         router.replace("/");
-      }, 700);
+      }, 4000);
       return () => clearTimeout(timer);
     }
   }, [gameOver]);
@@ -107,6 +109,8 @@ export default function MultiRoundGame() {
         setRoundData(updated);
         setMatchedCount((prev) => prev + 1);
         checkRoundComplete(updated);
+      } else {
+        setMistakes((prev) => prev + 1);
       }
       setSelectedWords({ dutch: null, english: null });
     } else {
@@ -129,8 +133,10 @@ export default function MultiRoundGame() {
           ),
         };
         setRoundData(updated);
-        setMatchedCount((prev) => prev + 1); // ✅ increment progress
+        setMatchedCount((prev) => prev + 1);
         checkRoundComplete(updated);
+      } else {
+        setMistakes((prev) => prev + 1);
       }
       setSelectedWords({ dutch: null, english: null });
     } else {
@@ -138,10 +144,19 @@ export default function MultiRoundGame() {
     }
   };
 
+  const mistakesStyle = () => {
+    return (
+      <Text style={{color: "#A4DD00", fontWeight: "bold"}}>{mistakes}</Text>
+    )
+  }
+
   if (gameOver) {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>🎉 Game Over! You finished all {totalRounds} rounds 🎉</Text>
+        <Text style={styles.gameOverText}>Game Over!</Text>
+        <Text style={[styles.text, { color: 'red', marginTop: 10 }]}>
+        Mistakes: <Text style={styles.mistakesText}>{mistakes}</Text>
+      </Text>
       </View>
     );
   }
@@ -183,7 +198,7 @@ export default function MultiRoundGame() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20, backgroundColor: "#161a1d" },
+  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 15, backgroundColor: "#161a1d" },
   columns: { flexDirection: "row", justifyContent: "space-around", flex: 1, width: "100%" },
   column: { flex: 1, justifyContent: "center" },
   item: {
@@ -198,5 +213,11 @@ const styles = StyleSheet.create({
   disabledItem: {
     backgroundColor: "#343a40",
   },
-  text: { color: "#adb5bd", fontSize: 20, textAlign: "center" },
+  text: { color: "#adb5bd", fontSize: 20, textAlign: "center", flexShrink: 1 },
+  gameOverText: { color: "#adb5bd", fontSize: 28, paddingBottom: 15, fontWeight: "bold" },
+  mistakesText: {
+    color: '#A4DD00',
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
 });

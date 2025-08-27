@@ -58,10 +58,9 @@ export default function AddWords() {
         autoCapitalize="none"
       />
 
-      {/* <Button title="Add Word" onPress={handleAdd} /> */}
       <TouchableOpacity onPress={handleAdd}>
         <View style={styles.button}>
-            <Text style={styles.buttonText}>Add Words</Text>
+            <Text style={styles.buttonText}>+</Text>
         </View>
       </TouchableOpacity>
 
@@ -121,15 +120,15 @@ const styles = StyleSheet.create({
   },
   wordText: {
     color: "#e0e0e0",
-    fontSize: 18,
+    fontSize: 17,
   },
   deleteText: {
     color: "red",
     fontWeight: "bold",
   },
   button: { 
-    width: 150, 
-    backgroundColor: "#161a1d", padding: 5, margin: 5, borderRadius: 10, borderColor: "#093FB4", borderWidth: 1
+    width: 100, 
+    backgroundColor: "#161a1d", padding: 0, margin: 5, borderRadius: 10, borderColor: "#093FB4", borderWidth: 1
   },
-  buttonText: { color: "#093FB4", fontSize: 18, textAlign: "center", fontWeight: "bold" },
+  buttonText: { color: "#093FB4", fontSize: 28, textAlign: "center", fontWeight: "bold" },
 });

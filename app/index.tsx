@@ -29,8 +29,8 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/images/owl.png")}
-        style={{ width: 150, height: 200, borderRadius: 10 }}
+        source={require("../assets/images/duel_night.png")}
+        style={{ width: 300, height: 200, borderRadius: 1 }}
       />
 
       <View style={styles.counterContainer}>
