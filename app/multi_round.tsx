@@ -61,7 +61,7 @@ export default function MultiRoundGame() {
       const timer = setTimeout(() => {
         router.dismissAll();
         router.replace("/");
-      }, 4000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [gameOver]);
