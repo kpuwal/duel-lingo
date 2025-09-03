@@ -3,6 +3,8 @@
 ## Overview
 Duel Lingo is a word and language learning app by pairing words.
 
+![Employee data](/assets/images/mockup.jpg?raw=true "mockup1")
+
 ## Features
 - **Word Matching Game**: Match words to reinforce memory and learn new vocabulary.
 - **Multi-Language Support**: Learn words in various languages.
