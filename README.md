@@ -6,14 +6,15 @@ Duel Lingo is a word and language learning app by pairing words.
 ## Features
 - **Word Matching Game**: Match words to reinforce memory and learn new vocabulary.
 - **Multi-Language Support**: Learn words in various languages.
-- **User-Friendly Interface**: Simple and intuitive design for seamless learning.
-- **Expo Go Compatibility**: Run the app instantly on your mobile device using Expo Go.
+- **User-Friendly Interface**: Simple design for easy learning.
+- **Expo Go Compatibility**: Run the app on your mobile device using Expo Go.
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js and npm/yarn installed on your system.
 - Expo Go app installed on your iOS or Android device.
+- [Direct link to use app through Expo Go](https://expo.dev/accounts/kpuwal/projects/VocabMatcher/updates/4d79e71e-04e0-4dbf-a743-5511595bfaa2)
 
 ### Installation
 1. **Clone the Repository**:
